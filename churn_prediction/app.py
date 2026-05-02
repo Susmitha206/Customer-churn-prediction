@@ -20,27 +20,24 @@ le_gen  = load('le_gender.pkl')
 le_con  = load('le_contract.pkl')
 FEATURES= load('feature_names.pkl')
 
-# ── Simple JSON "database" ────────────────────────────────────────────────────
-DB_FILE = os.path.join(BASE,'data','users.json')
+# ── In-memory "database" (Vercel-compatible) ──────────────────────────────────
+# NOTE: Data resets on each cold start — acceptable for demo/portfolio use
+_DB = {}
 
 def load_db():
-    if not os.path.exists(DB_FILE): return {}
-    with open(DB_FILE) as f: return json.load(f)
+    return _DB
 
 def save_db(db):
-    with open(DB_FILE,'w') as f: json.dump(db, f, indent=2)
+    _DB.update(db)
 
 def hash_pw(pw): return hashlib.sha256(pw.encode()).hexdigest()
 
 def get_user():
     if 'user_email' not in session: return None
-    db = load_db()
-    return db.get(session['user_email'])
+    return _DB.get(session['user_email'])
 
 def save_user(user):
-    db = load_db()
-    db[user['email']] = user
-    save_db(db)
+    _DB[user['email']] = user
 
 # ── Auth routes ───────────────────────────────────────────────────────────────
 @app.route('/')
@@ -294,7 +291,6 @@ def churn():
     user = get_user()
     if not user: return redirect(url_for('login'))
 
-    # Auto-fill values from user's banking data
     months_active = max(1, len(user['transactions']) // 2 + 1)
     avg_charges   = round(user['total_withdrawals'] / max(1, months_active), 2)
     n_products    = 1 + (1 if user['loans'] else 0) + (1 if user['fds'] else 0)
@@ -360,7 +356,6 @@ def churn():
             if f.get('tenure',0) < 12:   recommendations.append("Customer is new — offer welcome bonus or loyalty rewards.")
             if f.get('monthly_charges',0) > 3000: recommendations.append("High charges — consider offering a discounted plan.")
             if f.get('complaints',0) >= 2: recommendations.append("Multiple complaints — assign dedicated relationship manager.")
-            if f.get('contract') == 'Month-to-Month': recommendations.append("Encourage upgrade to annual/biennial contract with discount.")
             if not f.get('loan',0):       recommendations.append("No loan — offer pre-approved personal loan.")
             if not f.get('fd',0):         recommendations.append("No FD — promote fixed deposit with higher interest rate.")
             if f.get('balance',0) < 5000: recommendations.append("Low balance — offer zero-balance or cashback account upgrade.")
@@ -544,10 +539,4 @@ def download_sample_csv():
     return Response(output, mimetype='text/csv', headers={'Content-Disposition':'attachment;filename=sample_customers.csv'})
 
 if __name__ == '__main__':
-    print("\n" + "="*50)
-    print("  ChurnBank — Customer Churn Prediction System")
-    print("="*50)
-    print("  Running at: http://127.0.0.1:5000")
-    print("  Register, login, and predict churn!")
-    print("="*50 + "\n")
     app.run(debug=True)
