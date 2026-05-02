@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+{% block title %}Bulk Churn Prediction — ChurnBank{% endblock %}
+{% block extra_style %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+.upload-box{border:2px dashed #cbd5e0;border-radius:12px;padding:3rem;text-align:center;cursor:pointer;transition:all .2s;background:#fafafa}
+.upload-box:hover{border-color:#1d4ed8;background:#f0f4ff}
+.upload-icon{font-size:48px;margin-bottom:12px}
+.stat-card{border-radius:12px;padding:1.2rem;text-align:center;color:#fff}
+.stat-high{background:#dc2626}
+.stat-med{background:#d97706}
+.stat-low{background:#16a34a}
+.stat-total{background:#1d4ed8}
+.stat-num{font-size:36px;font-weight:800;line-height:1}
+.stat-lbl{font-size:13px;margin-top:4px;opacity:.9}
+.tbl-high{background:#fef2f2}
+.tbl-med{background:#fffbeb}
+.tbl-low{background:#f0fdf4}
+.action-call{color:#dc2626;font-weight:600}
+.action-email{color:#d97706;font-weight:600}
+.action-ok{color:#16a34a;font-weight:600}
+.progress-sm{height:6px;border-radius:3px;background:#e2e8f0;overflow:hidden;width:80px;display:inline-block;vertical-align:middle;margin-left:6px}
+.progress-sm-fill{height:100%;border-radius:3px}
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+
+<div style="margin-bottom:20px">
+  <h2 style="font-size:22px;font-weight:700">📊 Bulk Churn Prediction</h2>
+  <p style="color:#64748b;font-size:14px;margin-top:4px">Upload a CSV file with all your customers — get churn predictions for everyone in one click!</p>
+</div>
+
+<!-- Upload Section -->
+<div class="card" style="margin-bottom:20px">
+  <div class="card-title">Upload Customer CSV File</div>
+  
+  <div style="margin-bottom:16px">
+    <div class="alert alert-info">
+      <b>CSV must have these columns:</b> tenure, age, balance, salary, credit_score, products, has_card, is_active, monthly_charges, complaints, geography, gender, contract, loan, fd<br>
+      <span style="font-size:12px">geography: Hyderabad/Mumbai/Delhi/Bangalore/Chennai | gender: Male/Female | contract: Month-to-Month/One Year/Two Year | has_card, is_active, loan, fd: 0 or 1</span>
+    </div>
+  </div>
+
+  <form method="POST" enctype="multipart/form-data">
+    <div class="upload-box" onclick="document.getElementById('csvFile').click()">
+      <div class="upload-icon">📂</div>
+      <div style="font-size:16px;font-weight:600;margin-bottom:6px">Click to upload CSV file</div>
+      <div style="font-size:13px;color:#64748b" id="fileName">No file selected</div>
+      <input type="file" id="csvFile" name="csv_file" accept=".csv" style="display:none" onchange="document.getElementById('fileName').textContent=this.files[0].name" required/>
+    </div>
+    <button class="btn btn-warning btn-full" type="submit" style="padding:13px;font-size:15px;margin-top:14px">
+      🔮 Predict Churn for All Customers
+    </button>
+  </form>
+
+  <hr>
+  <div class="card-title">Download Sample CSV Template</div>
+  <p style="font-size:13px;color:#64748b;margin-bottom:10px">Don't have a CSV? Download this sample and fill your customer data:</p>
+  <a href="/download_sample_csv" class="btn btn-primary" style="font-size:13px">⬇ Download Sample CSV</a>
+</div>
+
+{% if results %}
+<!-- Summary Stats -->
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
+  <div class="stat-card stat-total">
+    <div class="stat-num">{{ results.total }}</div>
+    <div class="stat-lbl">Total Customers</div>
+  </div>
+  <div class="stat-card stat-high">
+    <div class="stat-num">{{ results.high_count }}</div>
+    <div class="stat-lbl">🔴 High Risk ({{ results.high_pct }}%)</div>
+  </div>
+  <div class="stat-card stat-med">
+    <div class="stat-num">{{ results.med_count }}</div>
+    <div class="stat-lbl">🟡 Medium Risk ({{ results.med_pct }}%)</div>
+  </div>
+  <div class="stat-card stat-low">
+    <div class="stat-num">{{ results.low_count }}</div>
+    <div class="stat-lbl">🟢 Low Risk ({{ results.low_pct }}%)</div>
+  </div>
+</div>
+
+<!-- Charts -->
+<div class="grid-2" style="margin-bottom:20px">
+  <div class="card">
+    <div class="card-title">Risk Distribution</div>
+    <canvas id="pieChart" height="220"></canvas>
+  </div>
+  <div class="card">
+    <div class="card-title">Top Churn Risk Factors</div>
+    <canvas id="barChart" height="220"></canvas>
+  </div>
+</div>
+
+<!-- Action Summary -->
+<div class="card" style="margin-bottom:20px">
+  <div class="card-title">Recommended Actions</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+    <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:1rem;text-align:center">
+      <div style="font-size:28px;font-weight:800;color:#dc2626">{{ results.high_count }}</div>
+      <div style="font-weight:700;color:#dc2626;margin-bottom:6px">Call Immediately</div>
+      <div style="font-size:12px;color:#64748b">High risk customers — assign relationship manager, offer special discount or plan upgrade</div>
+    </div>
+    <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:1rem;text-align:center">
+      <div style="font-size:28px;font-weight:800;color:#d97706">{{ results.med_count }}</div>
+      <div style="font-weight:700;color:#d97706;margin-bottom:6px">Send Offer Email</div>
+      <div style="font-size:12px;color:#64748b">Medium risk customers — send loyalty rewards, cashback offers or upgrade proposals</div>
+    </div>
+    <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:1rem;text-align:center">
+      <div style="font-size:28px;font-weight:800;color:#16a34a">{{ results.low_count }}</div>
+      <div style="font-weight:700;color:#16a34a;margin-bottom:6px">No Action Needed</div>
+      <div style="font-size:12px;color:#64748b">Low risk customers — happy and stable, maintain regular engagement</div>
+    </div>
+  </div>
+</div>
+
+<!-- Download Results -->
+<div class="card" style="margin-bottom:20px">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+    <div class="card-title" style="margin:0">Detailed Results — All {{ results.total }} Customers</div>
+    <a href="/download_results" class="btn btn-success" style="font-size:13px">⬇ Download Results CSV</a>
+  </div>
+
+  <!-- Filter buttons -->
+  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+    <button class="btn btn-primary" onclick="filterTable('all')" id="btn-all" style="font-size:12px;padding:6px 14px">All ({{ results.total }})</button>
+    <button class="btn" onclick="filterTable('High')" id="btn-High" style="font-size:12px;padding:6px 14px;background:#fee2e2;color:#991b1b;border-color:#fecaca">🔴 High Risk ({{ results.high_count }})</button>
+    <button class="btn" onclick="filterTable('Medium')" id="btn-Medium" style="font-size:12px;padding:6px 14px;background:#fef3c7;color:#92400e;border-color:#fde68a">🟡 Medium Risk ({{ results.med_count }})</button>
+    <button class="btn" onclick="filterTable('Low')" id="btn-Low" style="font-size:12px;padding:6px 14px;background:#dcfce7;color:#166534;border-color:#bbf7d0">🟢 Low Risk ({{ results.low_count }})</button>
+  </div>
+
+  <div style="overflow-x:auto">
+  <table id="resultsTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Customer ID</th>
+        <th>Tenure</th>
+        <th>Age</th>
+        <th>Balance</th>
+        <th>Monthly Charges</th>
+        <th>Complaints</th>
+        <th>Contract</th>
+        <th>Churn %</th>
+        <th>Risk Level</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for r in results.rows %}
+    <tr class="tbl-{{ r.risk|lower }} data-row" data-risk="{{ r.risk }}">
+      <td style="color:#94a3b8">{{ loop.index }}</td>
+      <td style="font-weight:600">{{ r.customer_id }}</td>
+      <td>{{ r.tenure }} mo</td>
+      <td>{{ r.age }}</td>
+      <td>₹{{ '{:,.0f}'.format(r.balance) }}</td>
+      <td>₹{{ '{:,.0f}'.format(r.monthly_charges) }}</td>
+      <td>{{ r.complaints }}</td>
+      <td style="font-size:12px">{{ r.contract }}</td>
+      <td>
+        <span style="font-weight:700;color:{% if r.risk=='High' %}#dc2626{% elif r.risk=='Medium' %}#d97706{% else %}#16a34a{% endif %}">{{ r.percent }}%</span>
+        <div class="progress-sm"><div class="progress-sm-fill" style="width:{{ r.percent }}%;background:{% if r.risk=='High' %}#dc2626{% elif r.risk=='Medium' %}#d97706{% else %}#16a34a{% endif %}"></div></div>
+      </td>
+      <td>
+        {% if r.risk == 'High' %}<span class="badge badge-danger">🔴 High</span>
+        {% elif r.risk == 'Medium' %}<span class="badge badge-warning">🟡 Medium</span>
+        {% else %}<span class="badge badge-success">🟢 Low</span>{% endif %}
+      </td>
+      <td>
+        {% if r.risk == 'High' %}<span class="action-call">📞 Call Now</span>
+        {% elif r.risk == 'Medium' %}<span class="action-email">📧 Send Offer</span>
+        {% else %}<span class="action-ok">✅ No Action</span>{% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<script>
+// Pie Chart
+new Chart(document.getElementById('pieChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['High Risk', 'Medium Risk', 'Low Risk'],
+    datasets: [{
+      data: [{{ results.high_count }}, {{ results.med_count }}, {{ results.low_count }}],
+      backgroundColor: ['#dc2626','#d97706','#16a34a'],
+      borderWidth: 2, borderColor: '#fff'
+    }]
+  },
+  options: { responsive:true, plugins:{ legend:{ position:'bottom' } } }
+});
+
+// Bar Chart
+new Chart(document.getElementById('barChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Tenure','Monthly Charges','Complaints','Contract','Balance','Products'],
+    datasets: [{
+      label: 'Feature Importance %',
+      data: [37.8, 21.6, 9.5, 5.7, 4.2, 3.4],
+      backgroundColor: ['#1d4ed8','#7c3aed','#dc2626','#d97706','#16a34a','#0891b2'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive:true,
+    plugins:{ legend:{ display:false } },
+    scales:{ y:{ beginAtZero:true, ticks:{ callback: v => v+'%' } } }
+  }
+});
+
+// Filter table
+function filterTable(risk) {
+  document.querySelectorAll('.data-row').forEach(row => {
+    row.style.display = (risk === 'all' || row.dataset.risk === risk) ? '' : 'none';
+  });
+  ['all','High','Medium','Low'].forEach(r => {
+    document.getElementById('btn-'+r).classList.toggle('btn-primary', r === risk);
+  });
+}
+</script>
+{% endif %}
+
+</div>
+{% endblock %}

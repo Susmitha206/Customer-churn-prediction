@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Pay Bills — ChurnBank{% endblock %}
+{% block content %}
+<div class="container">
+<div class="card" style="max-width:480px">
+  <div class="card-title">🧾 Pay Bills</div>
+  {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+  <p style="font-size:13px;color:#64748b;margin-bottom:14px">Available: <b style="color:#1d4ed8">₹{{ '{:,.2f}'.format(user.balance) }}</b></p>
+  <form method="POST">
+    <div class="form-group"><label>Bill Type</label>
+      <select class="form-control" name="bill_type">
+        <option>Electricity</option><option>Water</option><option>Gas</option>
+        <option>Internet / Broadband</option><option>Mobile Recharge</option>
+        <option>DTH / Cable TV</option><option>Insurance Premium</option><option>Credit Card Bill</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Consumer / Account No.</label><input class="form-control" name="consumer_no" placeholder="Bill account number" required/></div>
+    <div class="form-group"><label>Amount (₹)</label><input class="form-control" type="number" name="amount" placeholder="Enter amount" min="1" step="0.01" required/></div>
+    <div class="form-group"><label>Provider / Operator</label><input class="form-control" name="provider" placeholder="e.g. BESCOM, Airtel, Jio" required/></div>
+    <button class="btn btn-primary btn-full" type="submit" style="padding:12px;font-size:15px">Pay Now</button>
+  </form>
+</div>
+</div>
+{% endblock %}

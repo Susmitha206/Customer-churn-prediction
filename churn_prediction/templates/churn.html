@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+{% block title %}Churn Prediction — ChurnBank{% endblock %}
+{% block content %}
+<div class="container">
+
+<div style="margin-bottom:20px">
+  <h2 style="font-size:22px;font-weight:700">🔮 Customer Churn Prediction</h2>
+  <p style="color:#64748b;font-size:14px;margin-top:4px">AI-powered churn risk analysis using Random Forest, Gradient Boosting & Logistic Regression (Ensemble)</p>
+</div>
+
+<div class="grid-2" style="margin-bottom:20px;align-items:start">
+
+  <!-- Input Form -->
+  <div class="card">
+    <div class="card-title">Customer Profile</div>
+    <p style="font-size:12px;color:#94a3b8;margin-bottom:14px">Values are auto-filled from your banking activity. Adjust as needed.</p>
+    <form method="POST">
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tenure at Bank (months)</label>
+          <input class="form-control" type="number" name="tenure" value="{{ prefill.tenure }}" min="1" max="120" required/>
+        </div>
+        <div class="form-group">
+          <label>Age</label>
+          <input class="form-control" type="number" name="age" value="{{ prefill.age }}" min="18" max="100" required/>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Account Balance (₹)</label>
+          <input class="form-control" type="number" name="balance" value="{{ prefill.balance }}" step="0.01" min="0" required/>
+        </div>
+        <div class="form-group">
+          <label>Annual Salary (₹)</label>
+          <input class="form-control" type="number" name="salary" value="{{ prefill.salary }}" step="0.01" min="0" required/>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Credit Score (300–850)</label>
+          <input class="form-control" type="number" name="credit_score" value="{{ prefill.credit_score }}" min="300" max="850" required/>
+        </div>
+        <div class="form-group">
+          <label>Monthly Charges (₹)</label>
+          <input class="form-control" type="number" name="monthly_charges" value="{{ prefill.monthly_charges }}" step="0.01" min="0" required/>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Number of Products</label>
+          <input class="form-control" type="number" name="products" value="{{ prefill.products }}" min="1" max="5" required/>
+        </div>
+        <div class="form-group">
+          <label>Support Complaints (6 months)</label>
+          <input class="form-control" type="number" name="complaints" value="{{ prefill.complaints }}" min="0" max="10" required/>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Geography / City</label>
+          <select class="form-control" name="geography">
+            {% for city in ['Hyderabad','Mumbai','Delhi','Bangalore','Chennai'] %}
+            <option value="{{ city }}" {{ 'selected' if prefill.geography == city }}>{{ city }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Gender</label>
+          <select class="form-control" name="gender">
+            <option value="Male" {{ 'selected' if prefill.gender == 'Male' }}>Male</option>
+            <option value="Female" {{ 'selected' if prefill.gender == 'Female' }}>Female</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Contract Type</label>
+        <select class="form-control" name="contract">
+          <option value="Month-to-Month" {{ 'selected' if prefill.contract == 'Month-to-Month' }}>Month-to-Month</option>
+          <option value="One Year" {{ 'selected' if prefill.contract == 'One Year' }}>One Year</option>
+          <option value="Two Year" {{ 'selected' if prefill.contract == 'Two Year' }}>Two Year</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Has Credit Card?</label>
+          <select class="form-control" name="has_card">
+            <option value="1" {{ 'selected' if prefill.has_card|string in ['1','True'] }}>Yes</option>
+            <option value="0" {{ 'selected' if prefill.has_card|string in ['0','False'] }}>No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Is Active Member?</label>
+          <select class="form-control" name="is_active">
+            <option value="1" {{ 'selected' if prefill.is_active|string in ['1','True'] }}>Yes</option>
+            <option value="0" {{ 'selected' if prefill.is_active|string in ['0','False'] }}>No</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Has Active Loan?</label>
+          <select class="form-control" name="loan">
+            <option value="1" {{ 'selected' if prefill.loan|string in ['1','True'] }}>Yes</option>
+            <option value="0" {{ 'selected' if prefill.loan|string in ['0','False'] }}>No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Has Fixed Deposit?</label>
+          <select class="form-control" name="fd">
+            <option value="1" {{ 'selected' if prefill.fd|string in ['1','True'] }}>Yes</option>
+            <option value="0" {{ 'selected' if prefill.fd|string in ['0','False'] }}>No</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn btn-warning btn-full" type="submit" style="padding:13px;font-size:15px;margin-top:6px">
+        🔮 Predict Churn Risk
+      </button>
+    </form>
+  </div>
+
+  <!-- Result Panel -->
+  <div>
+    {% if result %}
+    {% set risk = result.risk %}
+    <!-- Main Result -->
+    <div class="card churn-result churn-{{ risk|lower }}" style="margin-bottom:14px">
+      <div class="card-title">Prediction Result</div>
+      <div class="churn-pct churn-pct-{{ risk|lower }}">{{ result.percent }}%</div>
+      <div style="margin:10px 0">
+        {% if risk == 'High' %}
+          <span class="badge badge-danger" style="font-size:14px;padding:5px 18px">🚨 High Churn Risk</span>
+        {% elif risk == 'Medium' %}
+          <span class="badge badge-warning" style="font-size:14px;padding:5px 18px">⚠️ Medium Churn Risk</span>
+        {% else %}
+          <span class="badge badge-success" style="font-size:14px;padding:5px 18px">✅ Low Churn Risk</span>
+        {% endif %}
+      </div>
+      <div class="risk-bar">
+        <div class="risk-bar-fill" style="width:{{ result.percent }}%;background:{% if risk=='High' %}#dc2626{% elif risk=='Medium' %}#d97706{% else %}#16a34a{% endif %}"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:#64748b;margin-top:2px"><span>0% safe</span><span>50%</span><span>100% will churn</span></div>
+      <div style="font-size:12px;color:#64748b;margin-top:10px">Prediction ID: {{ result.pred_id }}</div>
+    </div>
+
+    <!-- Model Breakdown -->
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-title">Model Breakdown (Ensemble of 3)</div>
+      <div class="model-row">
+        <span style="min-width:120px;font-weight:600">Random Forest</span>
+        <div class="model-bar"><div class="model-bar-fill" style="width:{{ result.rf }}%"></div></div>
+        <span style="min-width:40px;text-align:right;font-weight:700">{{ result.rf }}%</span>
+      </div>
+      <div class="model-row">
+        <span style="min-width:120px;font-weight:600">Gradient Boost</span>
+        <div class="model-bar"><div class="model-bar-fill" style="width:{{ result.gb }}%"></div></div>
+        <span style="min-width:40px;text-align:right;font-weight:700">{{ result.gb }}%</span>
+      </div>
+      <div class="model-row">
+        <span style="min-width:120px;font-weight:600">Logistic Reg.</span>
+        <div class="model-bar"><div class="model-bar-fill" style="width:{{ result.lr }}%"></div></div>
+        <span style="min-width:40px;text-align:right;font-weight:700">{{ result.lr }}%</span>
+      </div>
+      <hr>
+      <div class="model-row" style="font-size:14px">
+        <span style="min-width:120px;font-weight:700;color:#1d4ed8">Final (Ensemble)</span>
+        <div class="model-bar" style="height:10px"><div class="model-bar-fill" style="width:{{ result.percent }}%;height:10px;background:#1d4ed8"></div></div>
+        <span style="min-width:40px;text-align:right;font-weight:700;color:#1d4ed8">{{ result.percent }}%</span>
+      </div>
+    </div>
+
+    <!-- Top Factors -->
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-title">Top Churn Risk Factors (Feature Importance)</div>
+      {% for feat, imp in result.top_factors %}
+      <div class="model-row">
+        <span style="min-width:140px;font-size:13px">{{ feat.replace('_',' ').title() }}</span>
+        <div class="model-bar"><div class="model-bar-fill" style="width:{{ (imp*100*2.5)|int }}%;background:#7c3aed"></div></div>
+        <span style="min-width:44px;text-align:right;font-size:12px;color:#64748b">{{ '{:.1f}'.format(imp*100) }}%</span>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Recommendations -->
+    <div class="card">
+      <div class="card-title">🎯 Retention Recommendations</div>
+      {% for rec in result.recommendations %}
+      <div class="rec-item">
+        <span class="rec-icon">💡</span>
+        <span>{{ rec }}</span>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% else %}
+    <!-- No result yet -->
+    <div class="card" style="text-align:center;padding:3rem;min-height:400px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+      <div style="font-size:60px;margin-bottom:16px">🔮</div>
+      <div style="font-size:17px;font-weight:700;margin-bottom:8px">No prediction yet</div>
+      <div style="font-size:13px;color:#94a3b8;max-width:280px;line-height:1.6">Fill the customer profile form and click <b>Predict Churn Risk</b> to get instant AI-powered churn analysis</div>
+      <hr style="width:100%;margin:20px 0">
+      <div style="font-size:12px;color:#94a3b8">
+        <b>Models used:</b> Random Forest · Gradient Boosting · Logistic Regression<br>
+        <b>Accuracy:</b> ~93% on training data<br>
+        <b>Features:</b> 15 banking attributes
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Prediction History -->
+{% if history %}
+<div class="card">
+  <div class="card-title">Prediction History (Last 10)</div>
+  <table>
+    <thead>
+      <tr><th>Date</th><th>Prediction ID</th><th>Risk Level</th><th>RF</th><th>GB</th><th>LR</th><th style="text-align:right">Final Probability</th></tr>
+    </thead>
+    <tbody>
+    {% for p in history %}
+    <tr>
+      <td style="color:#64748b;font-size:12px">{{ p.date }}</td>
+      <td style="font-size:11px;color:#94a3b8">{{ p.id }}</td>
+      <td>
+        {% if p.risk_level == 'High' %}<span class="badge badge-danger">High</span>
+        {% elif p.risk_level == 'Medium' %}<span class="badge badge-warning">Medium</span>
+        {% else %}<span class="badge badge-success">Low</span>{% endif %}
+      </td>
+      <td>{{ '{:.1f}'.format(p.rf_prob*100) }}%</td>
+      <td>{{ '{:.1f}'.format(p.gb_prob*100) }}%</td>
+      <td>{{ '{:.1f}'.format(p.lr_prob*100) }}%</td>
+      <td style="text-align:right;font-weight:700;color:{% if p.risk_level=='High' %}#dc2626{% elif p.risk_level=='Medium' %}#d97706{% else %}#16a34a{% endif %}">
+        {{ '{:.1f}'.format(p.probability*100) }}%
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+</div>
+{% endblock %}

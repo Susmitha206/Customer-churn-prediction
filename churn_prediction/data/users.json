@@ -1,0 +1,511 @@
+{
+  "231fa04061@gmail.com": {
+    "id": "b3e8ad8a-191b-4084-86cb-3467697ec4fd",
+    "first_name": "Sai",
+    "last_name": "Vanama",
+    "email": "231fa04061@gmail.com",
+    "phone": "6300306618",
+    "dob": "2026-04-07",
+    "gender": "Female",
+    "geography": "Hyderabad",
+    "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "balance": 0.0,
+    "total_deposits": 0.0,
+    "total_withdrawals": 0.0,
+    "credit_score": 650,
+    "transactions": [],
+    "predictions": [],
+    "loans": [],
+    "fds": [],
+    "acc_no": "260876578",
+    "joined": "11 Apr 2026"
+  },
+  "231fa04g09@gmail.com": {
+    "id": "a7a4b756-bdb2-413f-bb87-42e5e3e98e22",
+    "first_name": "paladugu",
+    "last_name": "sahithi",
+    "email": "231fa04g09@gmail.com",
+    "phone": "9032805754",
+    "dob": "2005-07-07",
+    "gender": "Female",
+    "geography": "Hyderabad",
+    "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "balance": 0.0,
+    "total_deposits": 50000.0,
+    "total_withdrawals": 50000.0,
+    "credit_score": 650,
+    "transactions": [
+      {
+        "id": "TXN85B8F1AC",
+        "date": "23 Apr 2026 08:26",
+        "type": "Credit",
+        "category": "Deposit",
+        "description": "Deposit via UPI",
+        "note": "",
+        "amount": 50000.0
+      },
+      {
+        "id": "TXNA58D8ACB",
+        "date": "23 Apr 2026 08:28",
+        "type": "Debit",
+        "category": "Transfer",
+        "description": "UPI to sai (175656575)",
+        "note": "",
+        "amount": 50000.0
+      }
+    ],
+    "predictions": [
+      {
+        "id": "PRED149AF9",
+        "date": "23 Apr 2026 08:28",
+        "probability": 0.9584,
+        "risk_level": "High",
+        "score": 95,
+        "rf_prob": 0.8965,
+        "gb_prob": 0.9996,
+        "lr_prob": 1.0,
+        "input": {
+          "tenure": "2",
+          "age": "30",
+          "balance": "0.0",
+          "salary": "50000",
+          "credit_score": "650",
+          "monthly_charges": "25000.0",
+          "products": "1",
+          "complaints": "0",
+          "geography": "Hyderabad",
+          "gender": "Female",
+          "contract": "Month-to-Month",
+          "has_card": "1",
+          "is_active": "1",
+          "loan": "0",
+          "fd": "0"
+        }
+      }
+    ],
+    "loans": [],
+    "fds": [],
+    "acc_no": "175656575",
+    "joined": "23 Apr 2026"
+  },
+  "sai@gmail.com": {
+    "id": "ff5d22d2-ca02-4dc0-9d8a-62217d7d856c",
+    "first_name": "saii",
+    "last_name": "susmitha",
+    "email": "sai@gmail.com",
+    "phone": "6300306618",
+    "dob": "2005-01-25",
+    "gender": "Male",
+    "geography": "Hyderabad",
+    "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "balance": 44000.0,
+    "total_deposits": 104000.0,
+    "total_withdrawals": 60000.0,
+    "credit_score": 650,
+    "transactions": [
+      {
+        "id": "TXN09D74F2F",
+        "date": "23 Apr 2026 09:28",
+        "type": "Credit",
+        "category": "Deposit",
+        "description": "Deposit via UPI",
+        "note": "",
+        "amount": 100000.0
+      },
+      {
+        "id": "TXN37EE32C6",
+        "date": "23 Apr 2026 09:28",
+        "type": "Debit",
+        "category": "Withdrawal",
+        "description": "Withdrawal via Counter Cash",
+        "note": ".",
+        "amount": 50000.0
+      },
+      {
+        "id": "TXNE7F3D45B",
+        "date": "23 Apr 2026 09:32",
+        "type": "Credit",
+        "category": "Loan",
+        "description": "Home Loan disbursed",
+        "note": "EMI: \u20b9348.88/mo for 12 months @ 8.5% p.a.",
+        "amount": 4000.0
+      },
+      {
+        "id": "TXN129CBAC4",
+        "date": "23 Apr 2026 09:34",
+        "type": "Debit",
+        "category": "Transfer",
+        "description": "UPI to sus (323959883)",
+        "note": "",
+        "amount": 10000.0
+      }
+    ],
+    "predictions": [
+      {
+        "id": "PREDAFF00F",
+        "date": "23 Apr 2026 09:29",
+        "probability": 0.975,
+        "risk_level": "High",
+        "score": 97,
+        "rf_prob": 0.9381,
+        "gb_prob": 0.9993,
+        "lr_prob": 1.0,
+        "input": {
+          "tenure": "2",
+          "age": "30",
+          "balance": "50000.0",
+          "salary": "50000",
+          "credit_score": "650",
+          "monthly_charges": "25000.0",
+          "products": "1",
+          "complaints": "0",
+          "geography": "Hyderabad",
+          "gender": "Male",
+          "contract": "Month-to-Month",
+          "has_card": "1",
+          "is_active": "1",
+          "loan": "0",
+          "fd": "0"
+        }
+      }
+    ],
+    "loans": [
+      {
+        "id": "LNA5E783",
+        "type": "Home Loan",
+        "amount": 4000.0,
+        "tenure": 12,
+        "rate": 8.5,
+        "emi": 348.88,
+        "purpose": "",
+        "date": "23 Apr 2026",
+        "status": "Active"
+      }
+    ],
+    "fds": [],
+    "acc_no": "323959883",
+    "joined": "23 Apr 2026"
+  },
+  "puja@gmail.com": {
+    "id": "ef477068-323e-4a8a-9303-87bcf201efda",
+    "first_name": "puja",
+    "last_name": "vadranam",
+    "email": "puja@gmail.com",
+    "phone": "2345678098",
+    "dob": "2005-01-07",
+    "gender": "Female",
+    "geography": "Bangalore",
+    "password": "2dc0269fa54d269a87536810ec453cb095b4b92f45e63826a21dff1c2e76f169",
+    "balance": 0.0,
+    "total_deposits": 0.0,
+    "total_withdrawals": 0.0,
+    "credit_score": 650,
+    "transactions": [],
+    "predictions": [
+      {
+        "id": "PREDA52C52",
+        "date": "23 Apr 2026 11:19",
+        "probability": 0.7951,
+        "risk_level": "High",
+        "score": 79,
+        "rf_prob": 0.8307,
+        "gb_prob": 0.9841,
+        "lr_prob": 0.3461,
+        "input": {
+          "tenure": "1",
+          "age": "30",
+          "balance": "0.0",
+          "salary": "50000",
+          "credit_score": "650",
+          "monthly_charges": "500",
+          "products": "1",
+          "complaints": "0",
+          "geography": "Bangalore",
+          "gender": "Female",
+          "contract": "Month-to-Month",
+          "has_card": "1",
+          "is_active": "1",
+          "loan": "0",
+          "fd": "0"
+        }
+      }
+    ],
+    "loans": [],
+    "fds": [],
+    "acc_no": "733321019",
+    "joined": "23 Apr 2026"
+  },
+  "pujitha@gmail.com": {
+    "id": "590f713a-f2de-4a26-a9e6-cd658f1c1fae",
+    "first_name": "pujitha",
+    "last_name": "gayatri",
+    "email": "pujitha@gmail.com",
+    "phone": "2345678998",
+    "dob": "2005-01-30",
+    "gender": "Female",
+    "geography": "Mumbai",
+    "password": "472bbe83616e93d3c09a79103ae47d8f71e3d35a966d6e8b22f743218d04171d",
+    "balance": 0.0,
+    "total_deposits": 0.0,
+    "total_withdrawals": 0.0,
+    "credit_score": 650,
+    "transactions": [],
+    "predictions": [
+      {
+        "id": "PRED3DAA99",
+        "date": "23 Apr 2026 12:26",
+        "probability": 0.78,
+        "risk_level": "High",
+        "score": 78,
+        "rf_prob": 0.7932,
+        "gb_prob": 0.9844,
+        "lr_prob": 0.3449,
+        "input": {
+          "tenure": "1",
+          "age": "30",
+          "balance": "0.0",
+          "salary": "50000",
+          "credit_score": "650",
+          "monthly_charges": "500",
+          "products": "1",
+          "complaints": "0",
+          "geography": "Mumbai",
+          "gender": "Female",
+          "contract": "Month-to-Month",
+          "has_card": "1",
+          "is_active": "1",
+          "loan": "0",
+          "fd": "0"
+        }
+      }
+    ],
+    "loans": [],
+    "fds": [],
+    "acc_no": "341026993",
+    "joined": "23 Apr 2026"
+  },
+  "pujitha@gamil.com": {
+    "id": "4d7628f3-e952-4e29-9f98-75a7d8455f26",
+    "first_name": "pujjii",
+    "last_name": "vanama",
+    "email": "pujitha@gamil.com",
+    "phone": "9032805755",
+    "dob": "2014-01-12",
+    "gender": "Female",
+    "geography": "Hyderabad",
+    "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "balance": 50000.0,
+    "total_deposits": 50000.0,
+    "total_withdrawals": 0.0,
+    "credit_score": 650,
+    "transactions": [
+      {
+        "id": "TXN582E3180",
+        "date": "24 Apr 2026 15:39",
+        "type": "Credit",
+        "category": "Deposit",
+        "description": "Deposit via UPI",
+        "note": "",
+        "amount": 50000.0
+      }
+    ],
+    "predictions": [
+      {
+        "id": "PRED127D92",
+        "date": "24 Apr 2026 15:39",
+        "probability": 0.8065,
+        "risk_level": "High",
+        "score": 80,
+        "rf_prob": 0.8659,
+        "gb_prob": 0.9908,
+        "lr_prob": 0.319,
+        "input": {
+          "tenure": "1",
+          "age": "30",
+          "balance": "50000.0",
+          "salary": "50000",
+          "credit_score": "650",
+          "monthly_charges": "500",
+          "products": "1",
+          "complaints": "0",
+          "geography": "Hyderabad",
+          "gender": "Female",
+          "contract": "Month-to-Month",
+          "has_card": "1",
+          "is_active": "1",
+          "loan": "0",
+          "fd": "0"
+        }
+      }
+    ],
+    "loans": [],
+    "fds": [],
+    "acc_no": "206717758",
+    "joined": "24 Apr 2026"
+  },
+  "sathish@gmail.com": {
+    "id": "e48d8fbb-b66c-4442-adfc-c6a2aeb3b0eb",
+    "first_name": "sai",
+    "last_name": "sathish",
+    "email": "sathish@gmail.com",
+    "phone": "6300305518",
+    "dob": "2006-01-29",
+    "gender": "Female",
+    "geography": "Hyderabad",
+    "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "balance": 5005.0,
+    "total_deposits": 5010.0,
+    "total_withdrawals": 5.0,
+    "credit_score": 650,
+    "transactions": [
+      {
+        "id": "TXN2A57550B",
+        "date": "25 Apr 2026 09:42",
+        "type": "Credit",
+        "category": "Deposit",
+        "description": "Deposit via UPI",
+        "note": "",
+        "amount": 10.0
+      },
+      {
+        "id": "TXND9E5227A",
+        "date": "25 Apr 2026 09:44",
+        "type": "Debit",
+        "category": "Withdrawal",
+        "description": "Withdrawal via ATM",
+        "note": "",
+        "amount": 5.0
+      },
+      {
+        "id": "TXN84AD31F0",
+        "date": "25 Apr 2026 09:44",
+        "type": "Credit",
+        "category": "Loan",
+        "description": "Home Loan disbursed",
+        "note": "EMI: \u20b91,021.35/mo for 5 months @ 8.5% p.a.",
+        "amount": 5000.0
+      }
+    ],
+    "predictions": [
+      {
+        "id": "PREDE1948D",
+        "date": "25 Apr 2026 09:43",
+        "probability": 0.7937,
+        "risk_level": "High",
+        "score": 79,
+        "rf_prob": 0.8273,
+        "gb_prob": 0.9844,
+        "lr_prob": 0.3452,
+        "input": {
+          "tenure": "1",
+          "age": "30",
+          "balance": "10.0",
+          "salary": "50000",
+          "credit_score": "650",
+          "monthly_charges": "500",
+          "products": "1",
+          "complaints": "0",
+          "geography": "Hyderabad",
+          "gender": "Female",
+          "contract": "Month-to-Month",
+          "has_card": "1",
+          "is_active": "1",
+          "loan": "0",
+          "fd": "0"
+        }
+      }
+    ],
+    "loans": [
+      {
+        "id": "LN0E2C28",
+        "type": "Home Loan",
+        "amount": 5000.0,
+        "tenure": 5,
+        "rate": 8.5,
+        "emi": 1021.35,
+        "purpose": "",
+        "date": "25 Apr 2026",
+        "status": "Active"
+      }
+    ],
+    "fds": [],
+    "acc_no": "450459108",
+    "joined": "25 Apr 2026"
+  },
+  "koushik@gmail.com": {
+    "id": "968b0b11-b27f-41f0-8ba2-fc98affa2d99",
+    "first_name": "Koushik",
+    "last_name": "vanama",
+    "email": "koushik@gmail.com",
+    "phone": "9032805754",
+    "dob": "2004-06-02",
+    "gender": "Male",
+    "geography": "Mumbai",
+    "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "balance": 0.0,
+    "total_deposits": 0.0,
+    "total_withdrawals": 0.0,
+    "credit_score": 650,
+    "transactions": [],
+    "predictions": [
+      {
+        "id": "PREDFC5DE1",
+        "date": "01 May 2026 20:51",
+        "probability": 0.7726,
+        "risk_level": "High",
+        "score": 77,
+        "rf_prob": 0.7824,
+        "gb_prob": 0.9844,
+        "lr_prob": 0.3295,
+        "input": {
+          "tenure": "1",
+          "age": "30",
+          "balance": "0.0",
+          "salary": "50000",
+          "credit_score": "650",
+          "monthly_charges": "500",
+          "products": "1",
+          "complaints": "0",
+          "geography": "Mumbai",
+          "gender": "Male",
+          "contract": "Month-to-Month",
+          "has_card": "1",
+          "is_active": "1",
+          "loan": "0",
+          "fd": "0"
+        }
+      },
+      {
+        "id": "PRED470B97",
+        "date": "01 May 2026 20:52",
+        "probability": 0.884,
+        "risk_level": "High",
+        "score": 88,
+        "rf_prob": 0.7656,
+        "gb_prob": 0.9975,
+        "lr_prob": 0.8938,
+        "input": {
+          "tenure": "4",
+          "age": "21",
+          "balance": "0.0",
+          "salary": "50000",
+          "credit_score": "650",
+          "monthly_charges": "5000",
+          "products": "1",
+          "complaints": "0",
+          "geography": "Mumbai",
+          "gender": "Male",
+          "contract": "One Year",
+          "has_card": "1",
+          "is_active": "1",
+          "loan": "0",
+          "fd": "0"
+        }
+      }
+    ],
+    "loans": [],
+    "fds": [],
+    "acc_no": "533147834",
+    "joined": "01 May 2026"
+  }
+}

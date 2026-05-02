@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Fixed Deposit — ChurnBank{% endblock %}
+{% block content %}
+<div class="container">
+<div class="grid-2">
+  <div class="card">
+    <div class="card-title">📈 Create Fixed Deposit</div>
+    {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+    <p style="font-size:13px;color:#64748b;margin-bottom:14px">Available: <b style="color:#1d4ed8">₹{{ '{:,.2f}'.format(user.balance) }}</b></p>
+    <form method="POST">
+      <div class="form-group"><label>Principal Amount (₹)</label><input class="form-control" type="number" name="amount" placeholder="Minimum ₹1,000" min="1000" step="100" required/></div>
+      <div class="form-group"><label>Tenure &amp; Interest Rate</label>
+        <select class="form-control" name="tenure_rate">
+          <option value="3|5.5">3 months — 5.5% p.a.</option>
+          <option value="6|6.0">6 months — 6.0% p.a.</option>
+          <option value="12|6.75">1 year — 6.75% p.a.</option>
+          <option value="24|7.0">2 years — 7.0% p.a.</option>
+          <option value="36|7.25">3 years — 7.25% p.a.</option>
+          <option value="60|7.5">5 years — 7.5% p.a.</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Nominee Name</label><input class="form-control" name="nominee" placeholder="Nominee name"/></div>
+      <button class="btn btn-primary btn-full" type="submit" style="padding:12px;font-size:15px">Create FD</button>
+    </form>
+  </div>
+  <div class="card">
+    <div class="card-title">My Fixed Deposits</div>
+    {% if user.fds %}
+      {% for f in user.fds %}
+      <div style="border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <span style="font-weight:700">{{ f.id }}</span>
+          <span class="badge badge-success">{{ f.status }}</span>
+        </div>
+        <table style="font-size:13px">
+          <tr><td style="color:#64748b;padding:3px 0">Principal</td><td style="text-align:right;font-weight:600">₹{{ '{:,.2f}'.format(f.amount) }}</td></tr>
+          <tr><td style="color:#64748b;padding:3px 0">Maturity</td><td style="text-align:right;font-weight:600;color:#16a34a">₹{{ '{:,.2f}'.format(f.maturity) }}</td></tr>
+          <tr><td style="color:#64748b;padding:3px 0">Rate / Tenure</td><td style="text-align:right">{{ f.rate }}% p.a. / {{ f.months }} months</td></tr>
+          <tr><td style="color:#64748b;padding:3px 0">Created</td><td style="text-align:right">{{ f.date }}</td></tr>
+          {% if f.nominee %}<tr><td style="color:#64748b;padding:3px 0">Nominee</td><td style="text-align:right">{{ f.nominee }}</td></tr>{% endif %}
+        </table>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div style="text-align:center;padding:2rem;color:#94a3b8;font-size:13px">No FDs yet</div>
+    {% endif %}
+  </div>
+</div>
+</div>
+{% endblock %}

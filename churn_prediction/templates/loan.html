@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Loan — ChurnBank{% endblock %}
+{% block content %}
+<div class="container">
+<div class="grid-2">
+  <div class="card">
+    <div class="card-title">🏠 Apply for Loan</div>
+    <form method="POST">
+      <div class="form-group"><label>Loan Type</label>
+        <select class="form-control" name="loan_type"><option>Personal Loan</option><option>Home Loan</option><option>Car Loan</option><option>Education Loan</option><option>Business Loan</option></select>
+      </div>
+      <div class="form-group"><label>Loan Amount (₹)</label><input class="form-control" type="number" name="amount" placeholder="Enter amount" min="1000" step="1000" required/></div>
+      <div class="form-group"><label>Tenure (months)</label><input class="form-control" type="number" name="tenure" placeholder="e.g. 24" min="1" max="360" required/></div>
+      <div class="form-group"><label>Purpose</label><input class="form-control" name="purpose" placeholder="Brief purpose"/></div>
+      <button class="btn btn-primary btn-full" type="submit" style="padding:12px;font-size:15px">Apply for Loan</button>
+    </form>
+    <hr>
+    <div class="card-title">EMI Calculator</div>
+    <div class="form-group"><label>Principal (₹)</label><input class="form-control" type="number" id="eP" placeholder="100000" oninput="calcEmi()"/></div>
+    <div class="form-group"><label>Rate (% p.a.)</label><input class="form-control" type="number" id="eR" placeholder="10.5" step="0.1" oninput="calcEmi()"/></div>
+    <div class="form-group"><label>Tenure (months)</label><input class="form-control" type="number" id="eT" placeholder="24" oninput="calcEmi()"/></div>
+    <div id="emiResult" style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:12px;font-size:13px;color:#0369a1">Fill fields above to calculate EMI</div>
+  </div>
+  <div class="card">
+    <div class="card-title">My Active Loans</div>
+    {% if user.loans %}
+      {% for l in user.loans %}
+      <div style="border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <span style="font-weight:700">{{ l.type }}</span>
+          <span class="badge badge-success">{{ l.status }}</span>
+        </div>
+        <table style="font-size:13px">
+          <tr><td style="color:#64748b;padding:3px 0">Amount</td><td style="text-align:right;font-weight:600">₹{{ '{:,.2f}'.format(l.amount) }}</td></tr>
+          <tr><td style="color:#64748b;padding:3px 0">EMI/Month</td><td style="text-align:right;font-weight:600;color:#dc2626">₹{{ '{:,.2f}'.format(l.emi) }}</td></tr>
+          <tr><td style="color:#64748b;padding:3px 0">Tenure</td><td style="text-align:right">{{ l.tenure }} months @ {{ l.rate }}% p.a.</td></tr>
+          <tr><td style="color:#64748b;padding:3px 0">Since</td><td style="text-align:right">{{ l.date }}</td></tr>
+          {% if l.purpose %}<tr><td style="color:#64748b;padding:3px 0">Purpose</td><td style="text-align:right">{{ l.purpose }}</td></tr>{% endif %}
+        </table>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div style="text-align:center;padding:2rem;color:#94a3b8;font-size:13px">No active loans</div>
+    {% endif %}
+  </div>
+</div>
+</div>
+<script>
+function calcEmi(){
+  const p=parseFloat(document.getElementById('eP').value),r=parseFloat(document.getElementById('eR').value),t=parseInt(document.getElementById('eT').value);
+  const el=document.getElementById('emiResult');
+  if(!p||!r||!t){el.textContent='Fill fields above to calculate EMI';return}
+  const mr=r/12/100,emi=p*mr*Math.pow(1+mr,t)/(Math.pow(1+mr,t)-1),total=emi*t;
+  el.innerHTML=`<b style="font-size:15px">EMI: ₹${emi.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}/month</b><br>Total Payment: ₹${total.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})} | Interest: ₹${(total-p).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+}
+</script>
+{% endblock %}

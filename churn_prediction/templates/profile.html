@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Profile — ChurnBank{% endblock %}
+{% block content %}
+<div class="container">
+<div class="grid-2">
+  <div class="card">
+    <div class="card-title">👤 Personal Information</div>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+      <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1d4ed8,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#fff">
+        {{ user.first_name[0] }}{{ user.last_name[0] }}
+      </div>
+      <div>
+        <div style="font-weight:700;font-size:17px">{{ user.first_name }} {{ user.last_name }}</div>
+        <div style="font-size:13px;color:#64748b">{{ user.email }}</div>
+      </div>
+    </div>
+    <table>
+      <tr><td style="color:#64748b">Phone</td><td style="text-align:right">{{ user.ph or user.phone }}</td></tr>
+      <tr><td style="color:#64748b">Date of Birth</td><td style="text-align:right">{{ user.dob }}</td></tr>
+      <tr><td style="color:#64748b">Gender</td><td style="text-align:right">{{ user.gender }}</td></tr>
+      <tr><td style="color:#64748b">City</td><td style="text-align:right">{{ user.geography }}</td></tr>
+      <tr><td style="color:#64748b">Account No.</td><td style="text-align:right;font-weight:700">{{ user.acc_no }}</td></tr>
+      <tr><td style="color:#64748b">IFSC</td><td style="text-align:right">CBK0001234</td></tr>
+      <tr><td style="color:#64748b">Member Since</td><td style="text-align:right">{{ user.joined }}</td></tr>
+      <tr><td style="color:#64748b">Credit Score</td><td style="text-align:right"><b>{{ user.credit_score }}</b></td></tr>
+      <tr><td style="color:#64748b">Status</td><td style="text-align:right"><span class="badge badge-success">Active</span></td></tr>
+    </table>
+    <hr>
+    <div class="card-title">Security Settings</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;font-size:13px;margin-bottom:8px"><span>SMS Transaction Alerts</span><span class="badge badge-success">Active</span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;font-size:13px;margin-bottom:8px"><span>Email Notifications</span><span class="badge badge-success">Active</span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;font-size:13px"><span>Two-Factor Authentication</span><span class="badge badge-info">Enabled</span></div>
+  </div>
+  <div class="card">
+    <div class="card-title">🔑 Change Password</div>
+    <form method="POST">
+      <input type="hidden" name="action" value="change_password"/>
+      <div class="form-group"><label>Current Password</label><input class="form-control" type="password" name="old_password" placeholder="Current password" required/></div>
+      <div class="form-group"><label>New Password</label><input class="form-control" type="password" name="new_password" placeholder="New password (min 6 chars)" required/></div>
+      <div class="form-group"><label>Confirm New Password</label><input class="form-control" type="password" name="confirm_password" placeholder="Repeat new password" required/></div>
+      <button class="btn btn-primary btn-full" type="submit" style="padding:12px">Update Password</button>
+    </form>
+    <hr>
+    <div class="card-title">Account Summary</div>
+    <table style="font-size:13px">
+      <tr><td style="color:#64748b;padding:5px 0">Balance</td><td style="text-align:right;font-weight:700;color:#1d4ed8">₹{{ '{:,.2f}'.format(user.balance) }}</td></tr>
+      <tr><td style="color:#64748b;padding:5px 0">Total Deposits</td><td style="text-align:right;color:#16a34a">₹{{ '{:,.2f}'.format(user.total_deposits) }}</td></tr>
+      <tr><td style="color:#64748b;padding:5px 0">Total Withdrawals</td><td style="text-align:right;color:#dc2626">₹{{ '{:,.2f}'.format(user.total_withdrawals) }}</td></tr>
+      <tr><td style="color:#64748b;padding:5px 0">Transactions</td><td style="text-align:right">{{ user.transactions|length }}</td></tr>
+      <tr><td style="color:#64748b;padding:5px 0">Churn Predictions</td><td style="text-align:right">{{ user.predictions|length }}</td></tr>
+      <tr><td style="color:#64748b;padding:5px 0">Active Loans</td><td style="text-align:right">{{ user.loans|length }}</td></tr>
+      <tr><td style="color:#64748b;padding:5px 0">Fixed Deposits</td><td style="text-align:right">{{ user.fds|length }}</td></tr>
+    </table>
+  </div>
+</div>
+</div>
+{% endblock %}
