@@ -538,5 +538,5 @@ def download_sample_csv():
     output.seek(0)
     return Response(output, mimetype='text/csv', headers={'Content-Disposition':'attachment;filename=sample_customers.csv'})
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
